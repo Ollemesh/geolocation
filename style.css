@@ -1,9 +1,168 @@
-.balloon-container {
+.balloon_container {
     position: absolute;
 
-    width: 175px;
-    min-height: 100px;
+    width: 380px;
+    height: 470px;
 
-    border: 1px solid black;
+    font-family: sans-serif;
+
+    border-radius: 10px;
     background-color: white;
+}
+
+.header {
+    height: 44px;
+    padding: 10px 10px 0 30px;
+
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: #39f;
+}
+
+.header_closeBalloon {
+    float: right;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.header_address {
+    float: left;
+    width: 320px;
+
+    font-size: 12px;
+}
+
+.fa-map-marker {
+    position: absolute;
+    left: 15px;
+
+    display: inline-block;
+    width: 8px;
+    height: 13px;
+}
+
+.reviews {
+    height: 150px;
+    margin: 0 10px;
+    overflow-y: scroll;
+
+    border-bottom: 1px solid gray;
+}
+
+.name {
+    display: inline-block;
+    float: left;
+
+    font-weight: bold;
+}
+
+.place,
+.date {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+
+    color: gray;
+}
+
+.review {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.form_title {
+    margin: 0 0 0 10px;
+
+    font-weight: bold;
+
+    color: #39f;
+}
+
+.form_field {
+    width: 335px;
+    height: 26px;
+    padding-left: 20px;
+    margin-top: 7px;
+    margin-left: 10px;
+
+    border: 1px solid gray;
+    border-radius: 13px;
+}
+
+textarea.form_field {
+    height: 70px;
+    padding-top: 5px;
+
+    font-size: 15px;
+}
+
+.button {
+    float: right;
+    width: 88px;
+    height: 30px;
+    margin-top: 7px;
+    margin-right: 10px;
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    background-color: #39f;
+}
+
+input,
+textarea {
+    outline: none;
+}
+input:active,
+textarea:active {
+    outline: none;
+}
+:focus {
+    outline: none;
+}
+textarea {
+    resize: none;
+}
+textarea {
+    resize: vertical;
+}
+textarea {
+    resize: horizontal;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+}
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+}
+::-webkit-scrollbar-thumb {
+    border: 0 none #fff;
+    border-radius: 50px;
+    background: #c4c4c4;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #c4c4c4;
+}
+::-webkit-scrollbar-thumb:active {
+    background: #c4c4c4;
+}
+::-webkit-scrollbar-track {
+    border: 0 none #fff;
+    border-radius: 50px;
+    background: #fff;
+}
+::-webkit-scrollbar-track:hover {
+    background: #fff;
+}
+::-webkit-scrollbar-track:active {
+    background: #fff;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
 }
