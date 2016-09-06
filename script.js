@@ -2,33 +2,40 @@ ymaps.ready(init);
 
 function init() {
 
-//Инициализация переменных
+//Обяъявление переменных
 
 	let myMap = new ymaps.Map("map", {
-								center: [59.95, 30.33],
-								zoom: 11
-							});
+		center: [59.95, 30.33],
+		zoom: 11
+	});
 
 	let body = document.getElementsByTagName('body')[0];
 
-	let balloonLayout = ymaps.templateLayoutFactory.createClass('\
-		<div class="balloon-container">\
-			<div id="closeBalloon" style="float: right; cursor: pointer;" >X</div>\
-			<div id="address" style="float: left"></div></br>\
-			</br><div id="reviews" data-content=0></div></br>\
-			<input type="text" class="field" id="name" placeholder="name">\
-			<input type="text" class="field" id="place" placeholder="place">\
-			<input type="text" class="field" id="comment" placeholder="comment">\
-			<button id="submit">submit</button>\
-		</div>');
+	let balloonLayout = ymaps.templateLayoutFactory.createClass(
+		'<div class="balloon_container">' +
+			'<div class="header">' +
+			'<div id="closeBalloon" class="header_closeBalloon fa fa-times"> </div>' +
+			'<i class="fa fa-map-marker" aria-hidden="true"></i>' +
+			'<div id="address" class="header_address"></div></br>' +
+		'</div>' +
+			'</br><div id="reviews" class="reviews" data-content=0></div></br>' +
+			'<div class="form">' +
+				'<p class="form_title">ВАШ ОТЗЫВ</p>' +
+				'<input type="text" class="form_field" id="name" placeholder="Ваше имя">' +
+				'<input type="text" class="form_field" id="place" placeholder="Укажите место">' +
+				'<textarea class="form_field" id="comment" rows="5" placeholder="Поделитесь впечатлениями"></textarea>' +
+				'<input type="submit" id="submit" class="button">' +
+			'</div>' +
+		'</div>'
+	);
 
 	let clustererLayout = ymaps.templateLayoutFactory.createClass(
-		'<h2 class=ballon_header> {{properties.place|raw}}</h2>' +
-		'<div class=ballon_body>' +
-			'<a href="#" id="addressCarousel">{{properties.address|raw}}</a></br>' +
-			'{{properties.review|raw}}' +
-		'</div>' +
-		'<div class=ballon_footer>{{properties.date|raw}}</div>');
+			'<h2 class=ballon_header> {{properties.place|raw}}</h2>' +
+			'<div class=ballon_body>' +
+					'<a href="#" id="addressCarousel">{{properties.address|raw}}</a></br>' +
+					'{{properties.review|raw}}' +
+			'</div>' +
+			'<div class=ballon_footer>{{properties.date|raw}}</div>');
 
 	let myClusterer = new ymaps.Clusterer({
 		clusterDisableClickZoom: true,
@@ -44,28 +51,36 @@ function init() {
 	let balloon, coords;
 	let reviews = {};
 
-	//Инициализация функций
+//Инициализация функций
 
-	function showBalloon(e) {
-
+	function showEmptyBalloon(e) {
 		coords = e.get('coords');
-		if(balloon) balloon.close();
 		openBalloon();
 	};
 
+	function showFilledBalloon(e) {
+		if(e.target && e.target.getAttribute('id') === 'addressCarousel') {
+			openBalloon(e.target.innerHTML);
+		}
+		if(e.get && e.get('target').balloon) {
+			openBalloon(e.get('target').properties.get('address'));
+		}
+	};
+
 	function openBalloon(needReviews) {
-    if(needReviews) coords = reviews[needReviews][0].coords;
+		if(balloon) balloon.close();
+		if(needReviews) coords = reviews[needReviews][0].coords;
 		balloon = getBalloon();
 
 		balloon.open(coords).then(()=>{
-			getAddress();
-			document.getElementById('closeBalloon').addEventListener('click', ()=>{
+				getAddress();
+				document.getElementById('closeBalloon').addEventListener('click', ()=>{
 				balloon.close();
 			});
 			document.getElementById('submit').addEventListener('click', addReview);
-      if(needReviews) {
-        showReviews(needReviews);
-      }
+			if(needReviews) {
+				showReviews(needReviews);
+			}
 		});
 	};
 
@@ -88,11 +103,11 @@ function init() {
 				date:getCurrentDate(),
 				place:place.value,
 				address: document.getElementById('address').innerHTML,
-        coords: coords
+				coords: coords
 			};
 			pushToReviewList(data);
 			setPlacemark(coords, data);
-      showReviews(data.address);
+			showReviews(data.address);
 		}
 	};
 
@@ -107,20 +122,6 @@ function init() {
 		let tamplate = tamplateFn({list: reviews[address]});
 		document.getElementById('reviews').innerHTML = tamplate;
 	};
-//   function addReview(e) {
-//     let name = document.getElementById('name');
-//     let place = document.getElementById('place');
-//     let comment = document.getElementById('comment');
-//     let reviews = document.getElementById('reviews');
-
-//     if(name.value || place.value || comment.value){
-//       if(reviews.dataset.content === '0') reviews.innerHTML = '';
-//       reviews.dataset.content = '1';
-//       reviews.innerHTML += `${name.value} ${place.value} ${comment.value} ${getCurrentDate()} </br>`;
-//       balloon.reviews = reviews.innerHTML;
-//       setPlacemark(coords, balloon);
-//     }
-//   };
 
 	function getPlacemark(markerCoords, data) {
 		return new ymaps.Placemark(markerCoords, data, {
@@ -157,21 +158,14 @@ function init() {
 
 //Вешаем обработчики
 
-	myMap.events.add('click', showBalloon);
+	myMap.events.add('click', showEmptyBalloon);
+
+	document.addEventListener('click', showFilledBalloon);
+
+	myMap.geoObjects.events.add('click', showFilledBalloon);
+
 	myClusterer.events.add('click', (e) => {
 		balloon.close();
-    balloon = myClusterer.balloon;
-  });
-
-  document.addEventListener('click', (e) => {
-    if(e.target.getAttribute('id') === 'addressCarousel') {
-      balloon.close();
-      openBalloon(e.target.innerHTML);
-    }
-  });
-
-  myMap.geoObjects.events.add('click', (e) => {
-    balloon.close();
-    openBalloon(e.get('target').properties.get('address'));
-  });
+		balloon = myClusterer.balloon;
+	});
 };
