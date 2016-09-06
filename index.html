@@ -5,20 +5,21 @@
 	<title>Document</title>
 	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+	<script src="https://use.fontawesome.com/5e0e18a117.js"></script>
 	<link rel="stylesheet" href="style.css">
 	<script src="./script.js"></script>
 </head>
 <body>
-	<div id="map" style="width: 100%; height: 700px"></div>
+	<div id="map" style="width: 100%; height: 100vh"></div>
 
 <script id="reviewTemplate" type="text/x-handlebars-template">
 	{{#each list}}
 	<div class="review-contanier">
 		<div class="name">{{name}}</div>
-		<div class="place">{{palce}}</div>
+		<div class="place">{{place}}</div>
 		<div class="date">{{date}}</div>
+		<br>
 		<div class="review">{{review}}</div>
-    <hr>
 	</div>
 	{{/each}}
 </script>
